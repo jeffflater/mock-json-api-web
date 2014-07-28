@@ -1,4 +1,4 @@
-mock-json-api-site
+mock-json-api-web
 ==================
 
-mock-json-api-site
+mock-json-api-web
