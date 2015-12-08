@@ -78,7 +78,7 @@
 
                   <ul class="task-list">
                       <li>
-                          <strong>jsonStore</strong>: This is the local file location for the actual data that gets generated.  The data will be stored in this json file and served up on request by node.  This allows us to serve up well-known data vs. generating it everytime, thus simulating a database (of sorts).</li>
+                          <strong>jsonStore</strong>: This is the local file location for the actual data that gets generated. The data will be stored in this json file and served up on request by node. This allows us to serve up well-known data vs. generating it everytime, thus simulating a database (of sorts).</li>
                       <li>
                           <strong>mockRoutes</strong>: An array of routes to mock
 
@@ -86,13 +86,21 @@
                               <li>
                                   <strong>name</strong>: The unique identifier of the service method to be mocked</li>
                               <li>
-                                  <strong>mockRoute</strong>: The URl of the route to mock</li>
+                                  <strong>mockRoute</strong>: The URL of the route to mock - a regex</li>
                               <li>
                                   <strong>testScope</strong>: The behavior of the route response; success, fail, or error</li>
                               <li>
+                                  <strong>errorBody</strong>: The text that will be displayed in the response of any error thrown</li>
+                              <li>
                                   <strong>testScenario</strong>: Determines which JSON template to return in the array when testScope is "success"</li>
                               <li>
-                                  <strong>jsonTemplate</strong>: The actual object to be returned from the mock route.  This will also tell node how to construct the dummy data the first time the route is requested</li>
+                                  <strong>latency</strong>: in milliseconds. Will delay the response by set number of miliseconds. Can be a single number like 3000, a string like '3000' or a range of numbers as a string like '2000-7000'. If a range, it will randomly select a number in that range on each request.</li>
+                              <li>
+                                  <strong>jsonTemplate</strong>: The actual object to be returned from the mock route. This will also tell node how to construct the dummy data the first time the route is requested. It's simply an array of functions that return string representations of json objects laced with dummy json notation.</li>
+                              <li>
+                                  <strong>data</strong>: Your own data to be used with dummy-json</li>
+                              <li>
+                                  <strong>helpers</strong>: Custom helpers to be used with dummy-json. Refer to the <a href="https://github.com/webroo/dummy-json" target="_blank"></a>dummy-json documention</a> for more information.</li>
                           </ul>
                       </li>
                   </ul><div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'express'</span><span class="p">);</span>
@@ -108,6 +116,7 @@
             <span class="nx">mockRoute</span><span class="o">:</span> <span class="s1">'/api/foo'</span><span class="p">,</span>
             <span class="nx">testScope</span><span class="o">:</span> <span class="s1">'success'</span><span class="p">,</span>
             <span class="nx">testScenario</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="nx">latency</span><span class="o">:</span> <span class="mi">300</span><span class="p">,</span>
             <span class="nx">jsonTemplate</span><span class="o">:</span> <span class="p">[</span><span class="kd">function</span><span class="p">(){</span> <span class="k">return</span> <span class="s1">'{</span>
 <span class="s1">                "people": [</span>
 <span class="s1">                    {{#repeat 2}} {</span>
