@@ -1,0 +1,168 @@
+var mockdb = require('../../lib/mockdb.js');
+var mockObjects = require('../../lib/mockObjects.js');
+
+describe("Test Mockdb Scenarios", function() {
+
+    var routeId;
+
+    beforeEach(function () {
+    });
+
+    afterEach(function () {
+    });
+
+    it("should add new route to mock db", function(done){
+
+        var config = {
+            name: 'foo',
+            mockRoute: '/api/foo',
+            testScope: 'success',
+            errorBody: null,
+            testScenario: 0,
+            latency: 200,
+            jsonTemplate: ['hellox','hellox1','abc1x'],
+            data: {
+                bars: [1,2,3]
+            },
+            helpers: {
+                orientation: function() {
+                    return Math.random() > 0.5 ? 'left' : 'right';
+                }
+            }
+        };
+
+        var route = new mockObjects.MockRoute(config);
+        var promise = mockdb.saveRoute(route);
+        promise(function(response){
+            routeId = response.id;
+            expect(response.id).toBeDefined();
+            expect(response.name).toBe(config.name);
+            done();
+        }, function (err) {
+            expect(err).toBeDefined();
+            done();
+        });
+    });
+
+    it("should return a single route from the mock db", function(done){
+
+        if (routeId) {
+            var config = {
+                _id: routeId
+            };
+            var route = new mockObjects.MockRoute(config);
+            var promise = mockdb.getRoute(route);
+            promise(function(route){
+                expect(route.id).toBe(routeId);
+                done();
+            }, function (err) {
+                expect(err).toBeDefined();
+                done();
+            });
+        }
+    });
+
+    it("should return a list of routes from the mock db", function(done){
+
+        var promise = mockdb.getRoutes();
+        promise(function(routes){
+            expect(routes.length).toBeGreaterThan(0);
+            for (var route in routes) {
+                expect(routes[route].id).toBeDefined();
+            }
+            done();
+        }, function (err) {
+            expect(err).toBeDefined();
+            done();
+        });
+    });
+
+    it("should add a new scenario for existing route for mock db", function(done){
+        expect(routeId).toBeDefined();
+
+        if (routeId) {
+            var config = {
+                _id: routeId
+            };
+            var route = new mockObjects.MockRoute(config);
+            var scenario = 'hello21';
+            var promise = mockdb.saveTemplate(route, scenario);
+            promise(function(response){
+                expect(response.jsonTemplate).toBeDefined();
+                expect(response.jsonTemplate.length).toBe(4);
+                expect(response.jsonTemplate[3]).toBe('hello21');
+                done();
+            }, function (err) {
+                expect(err).toBeDefined();
+                done();
+            });
+        }
+
+    });
+
+    it("it should replace an existing scenario for existing route for mock db", function(done){
+        expect(routeId).toBeDefined();
+
+        if (routeId) {
+            var config = {
+                _id: routeId
+            };
+            var route = new mockObjects.MockRoute(config);
+            var scenario = 'hello22';
+            var index = 0;
+            console.log(index);
+            var promise = mockdb.saveTemplate(route, scenario, index);
+            promise(function(response){
+                expect(response.jsonTemplate).toBeDefined();
+                expect(response.jsonTemplate.length).toBe(4);
+                expect(response.jsonTemplate[index]).toBe(scenario);
+                done();
+            }, function (err) {
+                expect(err).toBeDefined();
+                done();
+            });
+        }
+    });
+
+    it("should remove existing scenario for existing route for mock db", function(done){
+        expect(routeId).toBeDefined();
+
+        if (routeId) {
+            var config = {
+                _id: routeId
+            };
+            var route = new mockObjects.MockRoute(config);
+            var index = 0;
+            var promise = mockdb.removeTemplate(route, index);
+            promise(function(response){
+                expect(response.jsonTemplate).toBeDefined();
+                expect(response.jsonTemplate.length).toBe(3);
+                done();
+            }, function (err) {
+                expect(err).toBeDefined();
+                done();
+            });
+        }
+    });
+
+    it("should remove existing route to mock db", function(done){
+        expect(routeId).toBeDefined();
+
+        if (routeId) {
+            var config = {
+                _id: routeId
+            };
+            var route = new mockObjects.MockRoute(config);
+            var promise = mockdb.removeRoute(route);
+            promise(function(response){
+                routeId = undefined;
+                expect(response).toBe(true);
+                done();
+            }, function (err) {
+                expect(err).toBeDefined();
+                done();
+            });
+        }
+    });
+
+});

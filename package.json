@@ -7,16 +7,25 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "body-parser": "^1.14.1",
+    "deferred": "^0.7.4",
     "express": "^3.4.8",
+    "mock-json-api": "^0.1.0",
+    "nedb": "^1.5.0",
     "request": "^2.34.0"
   },
   "devDependencies": {
     "express": "^3.4.8",
-    "grunt": "^0.4.4",
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.11.3",
     "grunt-execute": "^0.1.5",
+    "jasmine-core": "^2.4.1",
+    "jasmine-node-karma": "^1.6.1",
+    "jshint-stylish": "^2.1.0",
+    "karma": "^0.13.15",
+    "karma-jasmine": "^0.3.6",
     "request": "^2.34.0",
-    "grunt-contrib-jshint": "^0.10.0",
-    "jshint-stylish": "^0.4.0"
+    "rootpath": "^0.1.2"
   },
   "engines": {
     "node": "0.10.x",
